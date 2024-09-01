@@ -1,0 +1,9 @@
+name: ccwc - main
+
+on:
+  pull_request:
+    branches: ["main"]
+
+jobs:
+  quality:
+    uses: ./.github/workflows/_quality.yml
