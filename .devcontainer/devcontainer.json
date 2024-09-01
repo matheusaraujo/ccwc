@@ -1,0 +1,17 @@
+{
+  "name": "Go",
+  "build": {
+		"dockerfile": "Dockerfile"
+	},
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "go.toolsManagement.checkForUpdates": "local",
+        "go.useLanguageServer": true,
+        "go.gopath": "/go",
+        "go.goroot": "/usr/local/go"
+      },
+      "extensions": ["golang.Go"]
+    }
+  }
+}
