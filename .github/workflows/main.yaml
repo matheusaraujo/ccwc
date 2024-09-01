@@ -6,7 +6,7 @@ on:
 
 jobs:
   quality:
-    uses: ./.github/workflows/_quality.yml
+    uses: ./.github/workflows/_quality.yaml
   release:
     runs-on: ubuntu-latest
     needs: quality

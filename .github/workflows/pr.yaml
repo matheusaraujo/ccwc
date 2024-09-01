@@ -6,4 +6,4 @@ on:
 
 jobs:
   quality:
-    uses: ./.github/workflows/_quality.yml
+    uses: ./.github/workflows/_quality.yaml
