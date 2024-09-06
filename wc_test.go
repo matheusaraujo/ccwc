@@ -40,9 +40,9 @@ func TestCountLines(t *testing.T) {
 }
 
 func TestCountChars(t *testing.T) {
-	runTestFileTest(t, false, false, false, true, "testfile.txt", []byte("Hello\nworld\n"), "   10 testfile.txt")
+	runTestFileTest(t, false, false, false, true, "testfile.txt", []byte("Hello\nworld\n"), "   12 testfile.txt")
 }
 
 func TestCountEverything(t *testing.T) {
-	runTestFileTest(t, true, true, true, true, "testfile.txt", []byte("Hello\nhappy world\n"), "   2 3 18 16 testfile.txt")
+	runTestFileTest(t, true, true, true, true, "testfile.txt", []byte("Hello\nhappy world\n"), "   2 3 18 18 testfile.txt")
 }

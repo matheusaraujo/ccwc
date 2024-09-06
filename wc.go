@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"io"
 	"os"
 	"strconv"
 	"strings"
@@ -68,17 +69,12 @@ func countChars(filePath string) (int64, error) {
 	}
 	defer file.Close()
 
-	scanner := bufio.NewScanner(file)
-	var charCount int64 = 0
-
-	for scanner.Scan() {
-		line := scanner.Text()
-		charCount += int64(utf8.RuneCountInString(line)) + 2
-	}
-
-	if err := scanner.Err(); err != nil {
+	content, err := io.ReadAll(file)
+	if err != nil {
 		return 0, err
 	}
+
+	charCount := int64(utf8.RuneCount(content))
 
 	return charCount, nil
 }
