@@ -12,6 +12,7 @@ func main() {
 	var flagCountBytes bool
 	var flagCountWords bool
 	var flagCountLines bool
+	var flagCountChars bool
 
 	var rootCmd = &cobra.Command{
 		Use:   "ccwc [filename]",
@@ -21,13 +22,13 @@ func main() {
 			if len(args) < 1 {
 				return fmt.Errorf("error: missing required argument")
 			}
-			if !flagCountBytes && !flagCountLines && !flagCountWords {
+			if !flagCountBytes && !flagCountLines && !flagCountWords && !flagCountChars {
 				return fmt.Errorf("error: at least one of the flags is required")
 			}
 			return nil
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			result, err := wc(flagCountBytes, flagCountWords, flagCountLines, args[0])
+			result, err := wc(flagCountBytes, flagCountWords, flagCountLines, flagCountChars, args[0])
 
 			if err != nil {
 				fmt.Println("Error:", err)
@@ -41,6 +42,7 @@ func main() {
 	rootCmd.Flags().BoolVarP(&flagCountBytes, "count-bytes", "c", false, "Count bytes in the file")
 	rootCmd.Flags().BoolVarP(&flagCountWords, "count-words", "w", false, "Count words in the file")
 	rootCmd.Flags().BoolVarP(&flagCountLines, "count-lines", "l", false, "Count lines in the file")
+	rootCmd.Flags().BoolVarP(&flagCountChars, "count-characters", "m", false, "Count characters in the file")
 
 	if err := rootCmd.Execute(); err != nil {
 		fmt.Println(err)

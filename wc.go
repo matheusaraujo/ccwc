@@ -2,9 +2,11 @@ package main
 
 import (
 	"bufio"
+	"io"
 	"os"
 	"strconv"
 	"strings"
+	"unicode/utf8"
 )
 
 func countBytes(filePath string) (int64, error) {
@@ -60,7 +62,24 @@ func countWords(filePath string) (int64, error) {
 	return wordCount, nil
 }
 
-func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, filePath string) (string, error) {
+func countChars(filePath string) (int64, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return 0, err
+	}
+	defer file.Close()
+
+	content, err := io.ReadAll(file)
+	if err != nil {
+		return 0, err
+	}
+
+	charCount := int64(utf8.RuneCount(content))
+
+	return charCount, nil
+}
+
+func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, shouldCountChars bool, filePath string) (string, error) {
 	var result string
 
 	if shouldCountLines {
@@ -72,7 +91,7 @@ func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, fil
 	}
 
 	if shouldCountWords {
-		words, err := countWords((filePath))
+		words, err := countWords(filePath)
 		if err != nil {
 			return "", err
 		}
@@ -85,6 +104,14 @@ func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, fil
 			return "", err
 		}
 		result += strconv.FormatInt(fileSize, 10) + " "
+	}
+
+	if shouldCountChars {
+		characters, err := countChars(filePath)
+		if err != nil {
+			return "", err
+		}
+		result += strconv.FormatInt(characters, 10) + " "
 	}
 
 	result = "   " + result + filePath
