@@ -10,6 +10,7 @@ import (
 func main() {
 
 	var flagCountBytes bool
+	var flagCountWords bool
 	var flagCountLines bool
 
 	var rootCmd = &cobra.Command{
@@ -20,13 +21,13 @@ func main() {
 			if len(args) < 1 {
 				return fmt.Errorf("error: missing required argument")
 			}
-			if !flagCountBytes && !flagCountLines {
+			if !flagCountBytes && !flagCountLines && !flagCountWords {
 				return fmt.Errorf("error: at least one of the flags is required")
 			}
 			return nil
 		},
 		Run: func(cmd *cobra.Command, args []string) {
-			result, err := wc(flagCountBytes, flagCountLines, args[0])
+			result, err := wc(flagCountBytes, flagCountWords, flagCountLines, args[0])
 
 			if err != nil {
 				fmt.Println("Error:", err)
@@ -38,6 +39,7 @@ func main() {
 	}
 
 	rootCmd.Flags().BoolVarP(&flagCountBytes, "count-bytes", "c", false, "Count bytes in the file")
+	rootCmd.Flags().BoolVarP(&flagCountWords, "count-words", "w", false, "Count words in the file")
 	rootCmd.Flags().BoolVarP(&flagCountLines, "count-lines", "l", false, "Count lines in the file")
 
 	if err := rootCmd.Execute(); err != nil {
