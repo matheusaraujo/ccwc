@@ -5,21 +5,25 @@ import (
 	"strconv"
 )
 
-func wc(countBytes bool, filePath string) (string, error) {
-
+func countBytes(filePath string) (int64, error) {
 	fileInfo, err := os.Stat(filePath)
 	if err != nil {
-		return "", err
+		return 0, err
 	}
 
-	var fileSize int64
+	return fileInfo.Size(), nil
+}
 
-	if countBytes {
-		fileSize = fileInfo.Size()
-	} else {
-		fileSize = 0
+func wc(flagCountBytes bool, filePath string) (string, error) {
+
+	if flagCountBytes {
+		fileSize, err := countBytes(filePath)
+		if err != nil {
+			return "", err
+		}
+		return strconv.FormatInt(fileSize, 10) + " " + filePath, nil
 	}
 
-	return strconv.FormatInt(fileSize, 10) + " " + filePath, nil
+	return "", nil
 
 }
