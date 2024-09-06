@@ -13,7 +13,8 @@ func main() {
 		Short: "Coding Challenge - wc",
 		Long:  `A solution for the Coding Challenge wc!"`,
 		Run: func(cmd *cobra.Command, args []string) {
-			fmt.Println(wc())
+			result, _ := wc("test.txt")
+			fmt.Println(result)
 		},
 	}
 
