@@ -4,6 +4,7 @@ import (
 	"bufio"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func countBytes(filePath string) (int64, error) {
@@ -36,7 +37,30 @@ func countLines(filePath string) (int64, error) {
 	return lineCount, nil
 }
 
-func wc(shouldCountBytes bool, shouldCountLines bool, filePath string) (string, error) {
+func countWords(filePath string) (int64, error) {
+	file, err := os.Open(filePath)
+	if err != nil {
+		return 0, err
+	}
+	defer file.Close()
+
+	scanner := bufio.NewScanner(file)
+	var wordCount int64 = 0
+
+	for scanner.Scan() {
+		line := scanner.Text()
+		words := strings.Fields(line)
+		wordCount += int64(len(words))
+	}
+
+	if err := scanner.Err(); err != nil {
+		return 0, err
+	}
+
+	return wordCount, nil
+}
+
+func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, filePath string) (string, error) {
 	var result string
 
 	if shouldCountLines {
@@ -47,6 +71,14 @@ func wc(shouldCountBytes bool, shouldCountLines bool, filePath string) (string, 
 		result += strconv.FormatInt(lines, 10) + " "
 	}
 
+	if shouldCountWords {
+		words, err := countWords((filePath))
+		if err != nil {
+			return "", err
+		}
+		result += strconv.FormatInt(words, 10) + " "
+	}
+
 	if shouldCountBytes {
 		fileSize, err := countBytes(filePath)
 		if err != nil {
@@ -55,7 +87,7 @@ func wc(shouldCountBytes bool, shouldCountLines bool, filePath string) (string, 
 		result += strconv.FormatInt(fileSize, 10) + " "
 	}
 
-	result += filePath
+	result = "   " + result + filePath
 
 	return result, nil
 }

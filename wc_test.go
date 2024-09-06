@@ -5,7 +5,7 @@ import (
 	"testing"
 )
 
-func runTestFileTest(t *testing.T, countBytes bool, countLines bool, fileName string, content []byte, expectedResult string) {
+func runTestFileTest(t *testing.T, countBytes bool, countWords bool, countLines bool, fileName string, content []byte, expectedResult string) {
 
 	if err := os.WriteFile(fileName, content, 0644); err != nil {
 		t.Fatalf("Failed to create test file: %v", err)
@@ -17,7 +17,7 @@ func runTestFileTest(t *testing.T, countBytes bool, countLines bool, fileName st
 		}
 	}()
 
-	size, err := wc(countBytes, countLines, fileName)
+	size, err := wc(countBytes, countWords, countLines, fileName)
 	if err != nil {
 		t.Fatalf("Error getting file size: %v", err)
 	}
@@ -28,13 +28,17 @@ func runTestFileTest(t *testing.T, countBytes bool, countLines bool, fileName st
 }
 
 func TestCountBytes(t *testing.T) {
-	runTestFileTest(t, true, false, "testfile.txt", []byte("Hello, world!"), "13 testfile.txt")
+	runTestFileTest(t, true, false, false, "testfile.txt", []byte("Hello, world!"), "   13 testfile.txt")
+}
+
+func TestCountWords(t *testing.T) {
+	runTestFileTest(t, false, true, false, "testfile.txt", []byte("Hello, happy world!"), "   3 testfile.txt")
 }
 
 func TestCountLines(t *testing.T) {
-	runTestFileTest(t, false, true, "testfile.txt", []byte("Hello\nworld\n"), "2 testfile.txt")
+	runTestFileTest(t, false, false, true, "testfile.txt", []byte("Hello\nworld\n"), "   2 testfile.txt")
 }
 
-func TestCountLinesAndBytes(t *testing.T) {
-	runTestFileTest(t, true, true, "testfile.txt", []byte("Hello\nworld\n"), "2 12 testfile.txt")
+func TestCountEverything(t *testing.T) {
+	runTestFileTest(t, true, true, true, "testfile.txt", []byte("Hello\nhappy world\n"), "   2 3 18 testfile.txt")
 }
