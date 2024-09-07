@@ -24,22 +24,28 @@ func setOptions(countBytes, countWords, countLines, countChars bool) Options {
 	}
 }
 
-func validateArgs(cmd *cobra.Command, args []string) error {
-	if len(args) < 1 {
-		return fmt.Errorf("error: missing required argument (filename)")
-	}
-	return nil
-}
-
 func executeWC(args []string, options Options) {
-	result, err := wc(options, args[0])
+	if len(args) <= 0 {
+		result, err := wc(options, nil)
 
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
-		os.Exit(1)
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(result)
+
+	} else {
+		result, err := wc(options, &args[0])
+
+		if err != nil {
+			fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+			os.Exit(1)
+		}
+
+		fmt.Println(result)
 	}
 
-	fmt.Println(result)
 }
 
 func main() {
@@ -51,10 +57,9 @@ func main() {
 	)
 
 	rootCmd := &cobra.Command{
-		Use:     "ccwc [filename]",
-		Short:   "Coding Challenge - wc",
-		Long:    `A solution for the Coding Challenge wc`,
-		PreRunE: validateArgs,
+		Use:   "ccwc [filename]",
+		Short: "Coding Challenge - wc",
+		Long:  `A solution for the Coding Challenge wc`,
 		Run: func(cmd *cobra.Command, args []string) {
 			options := setOptions(flagCountBytes, flagCountWords, flagCountLines, flagCountChars)
 			executeWC(args, options)
