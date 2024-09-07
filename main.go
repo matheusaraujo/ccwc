@@ -7,35 +7,57 @@ import (
 	"github.com/spf13/cobra"
 )
 
+func setOptions(countBytes, countWords, countLines, countChars bool) Options {
+	if !countBytes && !countWords && !countLines && !countChars {
+		return Options{
+			CountBytes: true,
+			CountWords: true,
+			CountLines: true,
+			CountChars: false,
+		}
+	}
+	return Options{
+		CountBytes: countBytes,
+		CountWords: countWords,
+		CountLines: countLines,
+		CountChars: countChars,
+	}
+}
+
+func validateArgs(cmd *cobra.Command, args []string) error {
+	if len(args) < 1 {
+		return fmt.Errorf("error: missing required argument (filename)")
+	}
+	return nil
+}
+
+func executeWC(args []string, options Options) {
+	result, err := wc(options, args[0])
+
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: %v\n", err)
+		os.Exit(1)
+	}
+
+	fmt.Println(result)
+}
+
 func main() {
+	var (
+		flagCountBytes bool
+		flagCountWords bool
+		flagCountLines bool
+		flagCountChars bool
+	)
 
-	var flagCountBytes bool
-	var flagCountWords bool
-	var flagCountLines bool
-	var flagCountChars bool
-
-	var rootCmd = &cobra.Command{
-		Use:   "ccwc [filename]",
-		Short: "Coding Challenge - wc",
-		Long:  `A solution for the Coding Challenge wc"`,
-		PreRunE: func(cmd *cobra.Command, args []string) error {
-			if len(args) < 1 {
-				return fmt.Errorf("error: missing required argument")
-			}
-			if !flagCountBytes && !flagCountLines && !flagCountWords && !flagCountChars {
-				return fmt.Errorf("error: at least one of the flags is required")
-			}
-			return nil
-		},
+	rootCmd := &cobra.Command{
+		Use:     "ccwc [filename]",
+		Short:   "Coding Challenge - wc",
+		Long:    `A solution for the Coding Challenge wc`,
+		PreRunE: validateArgs,
 		Run: func(cmd *cobra.Command, args []string) {
-			result, err := wc(flagCountBytes, flagCountWords, flagCountLines, flagCountChars, args[0])
-
-			if err != nil {
-				fmt.Println("Error:", err)
-				os.Exit(1)
-			}
-
-			fmt.Println(result)
+			options := setOptions(flagCountBytes, flagCountWords, flagCountLines, flagCountChars)
+			executeWC(args, options)
 		},
 	}
 
@@ -45,7 +67,7 @@ func main() {
 	rootCmd.Flags().BoolVarP(&flagCountChars, "count-characters", "m", false, "Count characters in the file")
 
 	if err := rootCmd.Execute(); err != nil {
-		fmt.Println(err)
+		fmt.Fprintf(os.Stderr, "Command execution error: %v\n", err)
 		os.Exit(1)
 	}
 }

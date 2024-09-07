@@ -17,7 +17,14 @@ func runTestFileTest(t *testing.T, countBytes bool, countWords bool, countLines 
 		}
 	}()
 
-	size, err := wc(countBytes, countWords, countLines, countChars, fileName)
+	options := Options{
+		CountBytes: countBytes,
+		CountWords: countWords,
+		CountLines: countLines,
+		CountChars: countChars,
+	}
+
+	size, err := wc(options, fileName)
 	if err != nil {
 		t.Fatalf("Error getting file size: %v", err)
 	}

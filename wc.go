@@ -9,6 +9,13 @@ import (
 	"unicode/utf8"
 )
 
+type Options struct {
+	CountBytes bool
+	CountWords bool
+	CountLines bool
+	CountChars bool
+}
+
 func countBytes(filePath string) (int64, error) {
 	fileInfo, err := os.Stat(filePath)
 	if err != nil {
@@ -79,10 +86,10 @@ func countChars(filePath string) (int64, error) {
 	return charCount, nil
 }
 
-func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, shouldCountChars bool, filePath string) (string, error) {
+func wc(options Options, filePath string) (string, error) {
 	var result string
 
-	if shouldCountLines {
+	if options.CountLines {
 		lines, err := countLines(filePath)
 		if err != nil {
 			return "", err
@@ -90,7 +97,7 @@ func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, sho
 		result += strconv.FormatInt(lines, 10) + " "
 	}
 
-	if shouldCountWords {
+	if options.CountWords {
 		words, err := countWords(filePath)
 		if err != nil {
 			return "", err
@@ -98,7 +105,7 @@ func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, sho
 		result += strconv.FormatInt(words, 10) + " "
 	}
 
-	if shouldCountBytes {
+	if options.CountBytes {
 		fileSize, err := countBytes(filePath)
 		if err != nil {
 			return "", err
@@ -106,7 +113,7 @@ func wc(shouldCountBytes bool, shouldCountWords bool, shouldCountLines bool, sho
 		result += strconv.FormatInt(fileSize, 10) + " "
 	}
 
-	if shouldCountChars {
+	if options.CountChars {
 		characters, err := countChars(filePath)
 		if err != nil {
 			return "", err
