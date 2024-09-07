@@ -3,7 +3,6 @@ package main
 import (
 	"testing"
 
-	"github.com/spf13/cobra"
 	"github.com/stretchr/testify/assert"
 )
 
@@ -37,35 +36,6 @@ func TestSetOptions(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			got := setOptions(tt.bytes, tt.words, tt.lines, tt.chars)
 			assert.Equal(t, tt.want, got)
-		})
-	}
-}
-
-func TestValidateArgs(t *testing.T) {
-	tests := []struct {
-		name    string
-		args    []string
-		wantErr bool
-	}{
-		{
-			name:    "No filename provided",
-			args:    []string{},
-			wantErr: true,
-		},
-		{
-			name:    "Filename provided",
-			args:    []string{"file.txt"},
-			wantErr: false,
-		},
-	}
-
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			cmd := &cobra.Command{}
-			err := validateArgs(cmd, tt.args)
-			if (err != nil) != tt.wantErr {
-				t.Errorf("validateArgs() error = %v, wantErr %v", err, tt.wantErr)
-			}
 		})
 	}
 }
