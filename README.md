@@ -1,4 +1,6 @@
 [![Release](https://github.com/matheusaraujo/ccwc/actions/workflows/main.yaml/badge.svg)](https://github.com/matheusaraujo/ccwc/actions/workflows/main.yaml)
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=matheusaraujo_ccwc&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=matheusaraujo_ccwc)
+[![CodeQL Advanced](https://github.com/matheusaraujo/ccwc/actions/workflows/codeql.yaml/badge.svg)](https://github.com/matheusaraujo/ccwc/actions/workflows/codeql.yaml)
 
 # ccwc
 
