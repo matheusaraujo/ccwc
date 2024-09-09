@@ -166,10 +166,8 @@ func wc(options Options, filePath *string) (string, error) {
 		result += strconv.FormatInt(characters, 10) + " "
 	}
 
-	if filePath == nil {
-		result = "   " + result
-	} else {
-		result = "   " + result + *filePath
+	if filePath != nil {
+		result = result + *filePath
 	}
 
 	return result, nil

@@ -1,4 +1,4 @@
-name: ccwc - main
+name: pull request
 
 on:
   pull_request:
