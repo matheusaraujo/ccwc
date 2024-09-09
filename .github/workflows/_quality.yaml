@@ -31,4 +31,15 @@ jobs:
         with:
           go-version: 1.23
       - uses: bats-core/bats-action@2.0.0
-      - run: bats integration-tests.sh --show-output-of-passing-tests
+      - run: bats integration-tests.sh --show-output-of-passing-tests > result.txt || true
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bats-test-results
+          path: result.txt
+      - if: github.event_name == 'pull_request'
+        run: |
+          TEST_RESULTS=$(cat result.txt)
+          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
+          gh pr comment $PR_NUMBER --body "$TEST_RESULTS"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
