@@ -1,8 +1,6 @@
 name: quality
 
 on: workflow_call
-permissions:
-  pull-requests: write
 
 jobs:
   lint:
@@ -24,21 +22,3 @@ jobs:
         with:
           go-version: 1.23
       - run: go test -v -cover ./...
-  integration-tests:
-    runs-on: ubuntu-latest
-    needs: unit-tests
-    steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-go@v5
-        with:
-          go-version: 1.23
-      - uses: bats-core/bats-action@2.0.0
-      - run: bats integration-tests.sh --show-output-of-passing-tests > result.txt || true
-      - uses: actions/upload-artifact@v3
-        with:
-          name: bats-test-results
-          path: result.txt
-      - if: github.event_name == 'pull_request'
-        uses: mshick/add-pr-comment@v2
-        with:
-          message: a message from integration tests!
