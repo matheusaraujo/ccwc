@@ -36,6 +36,9 @@ run_wc_test() {
     percentage=$(echo "scale=2; ($ccwc_time / $wc_time)" | bc)
     echo "performance: $percentage"
 
+    echo "$ccwc_output"
+    echo "$wc_output"
+
     [ "$ccwc_output" == "$wc_output" ]
 }
 
