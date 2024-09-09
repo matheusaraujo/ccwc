@@ -31,5 +31,4 @@ jobs:
         with:
           go-version: 1.23
       - uses: bats-core/bats-action@2.0.0
-      - run: |
-          bats integration_tests.sh --show-output-of-passing-tests
+      - run: bats integration-tests.sh --show-output-of-passing-tests
