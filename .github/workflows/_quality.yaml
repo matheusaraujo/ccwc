@@ -30,8 +30,6 @@ jobs:
       - uses: actions/setup-go@v5
         with:
           go-version: 1.23
-      - run: |
-          git clone https://github.com/bats-core/bats-core.git /tmp/bats-core
-          sudo /tmp/bats-core/install.sh
+      - uses: bats-core/bats-action@2.0.0
       - run: |
           bats integration_tests.sh --show-output-of-passing-tests
