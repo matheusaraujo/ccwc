@@ -16,7 +16,7 @@ run_wc_test() {
         ccwc_output=$( { time ./ccwc "$options" "$test_file"; } 2>&1 )
     fi
     ccwc_time=$(echo "$ccwc_output" | grep real | awk '{print $2}')
-    ccwc_output="$(echo "$ccwc_output" | sed 1q | tr -s '[:space:]')"
+    ccwc_output="$(echo "$ccwc_output" | sed 1q | tr -d '[:space:]')"
 
     local wc_output
     local wc_time
@@ -26,7 +26,7 @@ run_wc_test() {
         wc_output=$( { time wc "$options" "$test_file"; } 2>&1 )
     fi
     wc_time=$(echo "$wc_output" | grep real | awk '{print $2}')
-    wc_output="$(echo "$wc_output" | sed 1q | tr -s '[:space:]')"
+    wc_output="$(echo "$wc_output" | sed 1q | tr -d '[:space:]')"
 
     echo "ccwc execution time: $ccwc_time"
     echo "wc execution time: $wc_time"

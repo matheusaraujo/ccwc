@@ -167,7 +167,7 @@ func wc(options Options, filePath *string) (string, error) {
 	}
 
 	if filePath != nil {
-		result = "   " + result + *filePath
+		result = result + *filePath
 	}
 
 	return result, nil
