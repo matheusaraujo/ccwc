@@ -8,6 +8,7 @@ jobs:
   quality:
     uses: ./.github/workflows/_quality.yaml
   integration-tests:
+    needs: quality
     uses: ./.github/workflows/_integration-tests.yaml
     permissions:
       pull-requests: write
