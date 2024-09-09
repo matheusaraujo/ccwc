@@ -37,9 +37,9 @@ jobs:
           name: bats-test-results
           path: result.txt
       - if: github.event_name == 'pull_request'
-        run: |
-          TEST_RESULTS=$(cat result.txt)
-          PR_NUMBER=$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")
-          gh pr comment $PR_NUMBER --body "$TEST_RESULTS"
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        uses: mshick/add-pr-comment@v2
+        with:
+          message: |
+            **Hello**
+            🌏
+            !
