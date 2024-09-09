@@ -1,0 +1,27 @@
+name: integration-tests
+
+on: workflow_call
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-go@v5
+        with:
+          go-version: 1.23
+      - uses: bats-core/bats-action@2.0.0
+      - run: bats integration-tests.sh --show-output-of-passing-tests > result.txt
+      - run: |
+          echo "# integration-tests result" > result_with_header.txt
+          echo '```' >> result_with_header.txt
+          cat result.txt >> result_with_header.txt
+          echo '```' >> result_with_header.txt
+      - uses: actions/upload-artifact@v3
+        with:
+          name: bats-test-results
+          path: result_with_header.txt
+      - if: github.event_name == 'pull_request'
+        uses: mshick/add-pr-comment@v2
+        with:
+          message-path: result_with_header.txt
