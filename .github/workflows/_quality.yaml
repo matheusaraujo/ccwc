@@ -1,6 +1,8 @@
 name: quality
 
 on: workflow_call
+permissions:
+  pull-requests: write
 
 jobs:
   lint:
@@ -24,8 +26,6 @@ jobs:
       - run: go test -v -cover ./...
   integration-tests:
     runs-on: ubuntu-latest
-    permissions:
-      pull-requests: write
     needs: unit-tests
     steps:
       - uses: actions/checkout@v4
@@ -41,4 +41,4 @@ jobs:
       - if: github.event_name == 'pull_request'
         uses: mshick/add-pr-comment@v2
         with:
-          message-path: result.txt
+          message: a message from integration tests!
