@@ -4,6 +4,7 @@ on:
   pull_request:
     branches: ["main"]
 
+permissions: write-all
 jobs:
   quality:
     uses: ./.github/workflows/_quality.yaml
