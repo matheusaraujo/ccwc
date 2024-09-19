@@ -3,6 +3,7 @@ package main
 import (
 	"bufio"
 	"bytes"
+	"fmt"
 	"io"
 	"os"
 	"strconv"
@@ -18,21 +19,19 @@ type Options struct {
 }
 
 func countBytes(r io.Reader) (int64, error) {
-	var size int64
 	if file, ok := r.(*os.File); ok {
 		fileInfo, err := file.Stat()
 		if err != nil {
-			return 0, err
+			return 0, fmt.Errorf("failed to stat file: %w", err)
 		}
-		size = fileInfo.Size()
-	} else {
-		content, err := io.ReadAll(r)
-		if err != nil {
-			return 0, err
-		}
-		size = int64(len(content))
+		return fileInfo.Size(), nil
 	}
-	return size, nil
+
+	n, err := io.Copy(io.Discard, r)
+	if err != nil {
+		return 0, fmt.Errorf("failed to read input: %w", err)
+	}
+	return n, nil
 }
 
 func countLines(r io.Reader) (int64, error) {

@@ -12,3 +12,16 @@ jobs:
     uses: ./.github/workflows/_integration-tests.yaml
     permissions:
       pull-requests: write
+  review:
+    runs-on: ubuntu-latest
+    needs: quality
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+      - name: AI Code Reviewer
+        uses: matheusaraujo/ai-codereviewer@main
+        with:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
+          OPENAI_API_MODEL: "gpt-4"
+          exclude: "**/*.json"
